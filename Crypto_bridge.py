@@ -1,4 +1,16 @@
 import os
+import sys
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+_VENV_SITE = os.path.join(os.path.dirname(_HERE), 'capstone 2', 'env', 'Lib', 'site-packages')
+if os.path.isdir(_VENV_SITE) and _VENV_SITE not in sys.path:
+    sys.path.insert(0, _VENV_SITE)
+for _ver in ['312', '311', '310', '313']:
+    _sp = os.path.join(f'C:/Python{_ver}', 'Lib', 'site-packages')
+    if os.path.isdir(_sp) and _sp not in sys.path:
+        sys.path.insert(0, _sp)
+
 import hmac
 import hashlib
 import struct
@@ -23,7 +35,7 @@ class CryptoBridge:
     CT_LEN_FIELD = 4
     HEADER_LEN = KEY_ID_LEN + SEQ_LEN + NONCE_LEN + CT_LEN_FIELD
     WINDOW_SIZE = 64
-    MAX_KEY_LIFETIME = 100000
+    MAX_KEY_LIFETIME = 100
 
     def __init__(self, master_secret: bytes):
         if len(master_secret) < 32:
