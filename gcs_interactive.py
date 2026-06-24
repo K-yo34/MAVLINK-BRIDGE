@@ -25,7 +25,7 @@ except ImportError:
     print("keyboard library not found. Run: pip install keyboard")
     sys.exit(1)
 
-DEVICE_B_IP = "192.1.1.0"
+DEVICE_B_IP = "10.200.28.26"
 UAV_LISTEN_PORT = 14550
 
 def main():
