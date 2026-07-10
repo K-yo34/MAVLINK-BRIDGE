@@ -25,18 +25,21 @@ except ImportError:
     print("keyboard library not found. Run: pip install keyboard")
     sys.exit(1)
 
-DEVICE_B_IP = "10.200.28.26"
+DEVICE_B_IP = "192.168.1.145"
 UAV_LISTEN_PORT = 14550
 
 def main():
     print(f"GCS targeting UAV at {DEVICE_B_IP}:{UAV_LISTEN_PORT}")
-    print("Controls: UP=alt_up, DOWN=alt_down, LEFT=move_left, RIGHT=move_right, ESC=exit")
+    print("Controls: UP=toggle ascend, DOWN=toggle descend, LEFT=move_left, RIGHT=move_right, ESC=exit")
 
     secret = b"my_super_secret_capstone_key_32_bytes!"
     bridge = CryptoBridge(secret)
     mav = mavutil.mavlink.MAVLink(None, srcSystem=2, srcComponent=1)
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.settimeout(0.1)
+
+    ascending = False
+    descending = False
 
     csv_file = open("gcs_mission_log.csv", "w", newline="")
     csv_writer = csv.writer(csv_file)
@@ -54,6 +57,11 @@ def main():
                         lat = msg.lat / 1e7
                         lon = msg.lon / 1e7
                         print(f"\n[RECV] telemetry: alt={alt:.1f}m, lat={lat:.5f}, lon={lon:.5f}")
+
+                        if alt > 35000.0:
+                            print("WARNING: altitude exceeds 100m")
+                        if alt <= 0:
+                            print("CRASHED: UAV crashed")
 
                         ts = datetime.now().strftime("%H:%M:%S")
                         csv_writer.writerow([ts, "INBOUND", "TELEMETRY_RECEIVED", f"{alt:.1f}", "AUTHENTICATED"])
@@ -79,19 +87,41 @@ def main():
             action_name = ""
 
             if keyboard.is_pressed('up'):
-                action_name = "ALT_UP"
-                cmd_to_send = mav.command_long_encode(1, 1, 176, 0, 1, 0, 0, 0, 0, 0, 0)
+                ascending = not ascending
+                if ascending:
+                    descending = False
+                    action_name = "START_ASCEND"
+                    cmd_to_send = mav.command_long_encode(1, 1, 176, 0, 1, 0, 0, 0, 0, 0, 0)
+                else:
+                    action_name = "STOP"
+                    cmd_to_send = mav.command_long_encode(1, 1, 176, 0, 0, 0, 0, 0, 0, 0, 0)
+                time.sleep(0.3)
+
             elif keyboard.is_pressed('down'):
-                action_name = "ALT_DOWN"
-                cmd_to_send = mav.command_long_encode(1, 1, 176, 0, -1, 0, 0, 0, 0, 0, 0)
+                descending = not descending
+                if descending:
+                    ascending = False
+                    action_name = "START_DESCEND"
+                    cmd_to_send = mav.command_long_encode(1, 1, 176, 0, -1, 0, 0, 0, 0, 0, 0)
+                else:
+                    action_name = "STOP"
+                    cmd_to_send = mav.command_long_encode(1, 1, 176, 0, 0, 0, 0, 0, 0, 0, 0)
+                time.sleep(0.3)
+
             elif keyboard.is_pressed('left'):
                 action_name = "MOVE_LEFT"
                 cmd_to_send = mav.command_long_encode(1, 1, 176, 0, 0, -1, 0, 0, 0, 0, 0)
+                time.sleep(0.25)
+
             elif keyboard.is_pressed('right'):
                 action_name = "MOVE_RIGHT"
                 cmd_to_send = mav.command_long_encode(1, 1, 176, 0, 0, 1, 0, 0, 0, 0, 0)
+                time.sleep(0.25)
+
             elif keyboard.is_pressed('esc'):
                 print("Exiting GCS...")
+                shutdown_cmd = mav.command_long_encode(1, 1, 0, 0, 99, 0, 0, 0, 0, 0, 0)
+                sock.sendto(bridge.encrypt(shutdown_cmd.pack(mav)), (DEVICE_B_IP, UAV_LISTEN_PORT))
                 break
 
             if cmd_to_send:
@@ -110,10 +140,15 @@ def main():
                 csv_writer.writerow([ts, "OUTBOUND", action_name, "N/A", "ENCRYPTED"])
                 csv_file.flush()
 
-                time.sleep(0.25)
+            time.sleep(0.05)
 
     except KeyboardInterrupt:
         print("Exiting GCS...")
+        try:
+            shutdown_cmd = mav.command_long_encode(1, 1, 0, 0, 99, 0, 0, 0, 0, 0, 0)
+            sock.sendto(bridge.encrypt(shutdown_cmd.pack(mav)), (DEVICE_B_IP, UAV_LISTEN_PORT))
+        except Exception:
+            pass
     finally:
         csv_file.close()
 
