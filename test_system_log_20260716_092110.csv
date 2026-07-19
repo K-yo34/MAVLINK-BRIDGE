@@ -1,0 +1,8 @@
+Test,Description,Status,Detail,Timestamp
+__main__.TestCryptoBridgeSecurity.test_TC01_encrypt_decrypt,TC-01: Basic encryption and decryption round-trip.,PASS,,2026-07-16T09:21:06.288297
+__main__.TestCryptoBridgeSecurity.test_TC02_replay_prevention,TC-02: Same packet decrypted twice — second returns None.,PASS,,2026-07-16T09:21:06.291299
+__main__.TestCryptoBridgeSecurity.test_TC03_tamper_detection,TC-03: Bit-flipped ciphertext returns None.,PASS,,2026-07-16T09:21:06.292804
+__main__.TestCryptoBridgeSecurity.test_TC04_invalid_lengths,TC-04: Truncated / length-corrupted packets return None.,PASS,,2026-07-16T09:21:06.293811
+__main__.TestCryptoBridgeSecurity.test_TC05_key_rotation,TC-05: Key rotates after MAX_KEY_LIFETIME; receiver syncs.,PASS,,2026-07-16T09:21:06.332450
+__main__.TestCryptoBridgeSecurity.test_TC06_wrong_key,TC-06: Packet from different master secret returns None.,PASS,,2026-07-16T09:21:06.333454
+setUpClass (__main__.TestUAVGCSIntegration),,SKIP,UAV at 192.168.1.145:14550 not reachable. Start uav_interactive_linux.py on the Linux VM.,2026-07-16T09:21:10.973364

@@ -1,0 +1,18 @@
+Test,Description,Status,Detail,Timestamp
+__main__.TestCryptoBridgeSecurity.test_TC01_encrypt_decrypt,TC-01: Basic encryption and decryption round-trip.,PASS,,2026-07-16T13:12:27.305893
+__main__.TestCryptoBridgeSecurity.test_TC02_replay_prevention,TC-02: Same packet decrypted twice — second returns None.,PASS,,2026-07-16T13:12:27.308415
+__main__.TestCryptoBridgeSecurity.test_TC03_tamper_detection,TC-03: Bit-flipped ciphertext returns None.,PASS,,2026-07-16T13:12:27.309412
+__main__.TestCryptoBridgeSecurity.test_TC04_invalid_lengths,TC-04: Truncated / length-corrupted packets return None.,PASS,,2026-07-16T13:12:27.309412
+__main__.TestCryptoBridgeSecurity.test_TC05_key_rotation,TC-05: Key rotates after MAX_KEY_LIFETIME; receiver syncs.,PASS,,2026-07-16T13:12:27.356256
+__main__.TestCryptoBridgeSecurity.test_TC06_wrong_key,TC-06: Packet from different master secret returns None.,PASS,,2026-07-16T13:12:27.358258
+__main__.TestCryptoBridgeSecurity.test_TC06b_crypto_latency,TC-06b: Encrypt + decrypt latency over 100 iterations.,PASS,,2026-07-16T13:12:27.721940
+__main__.TestUAVGCSIntegration.test_TC07_baseline_comms,"TC-07: Send STOP, receive telemetry.",PASS,,2026-07-16T13:12:35.505816
+__main__.TestUAVGCSIntegration.test_TC08_ascend,TC-08: ASCEND raises altitude >= 10m.,PASS,,2026-07-16T13:12:40.773552
+__main__.TestUAVGCSIntegration.test_TC09_descend,TC-09: DESCEND lowers altitude >= 10m.,PASS,,2026-07-16T13:12:48.059405
+__main__.TestUAVGCSIntegration.test_TC10_stop,TC-10: STOP holds altitude steady (drift <= 2m).,PASS,,2026-07-16T13:12:52.383629
+__main__.TestUAVGCSIntegration.test_TC11_move_left,TC-11: MOVE_LEFT decreases longitude.,PASS,,2026-07-16T13:12:55.962994
+__main__.TestUAVGCSIntegration.test_TC12_move_right,TC-12: MOVE_RIGHT increases longitude.,PASS,,2026-07-16T13:12:59.977309
+__main__.TestUAVGCSIntegration.test_TC13_key_rotation_integration,TC-13: Key rotation causes zero packet drops.,PASS,,2026-07-16T13:13:04.707098
+__main__.TestUAVGCSIntegration.test_TC14_replay_attack_integration,TC-14: Replayed packets ignored; UAV stays responsive.,PASS,,2026-07-16T13:13:05.929650
+__main__.TestUAVGCSIntegration.test_TC15_wrong_key_integration,TC-15: Wrong-key packet rejected; UAV stays alive.,PASS,,2026-07-16T13:13:06.741212
+__main__.TestUAVGCSIntegration.test_TC16_malformed_packet,TC-16: Garbage packets don't crash the UAV.,PASS,,2026-07-16T13:13:07.555865
