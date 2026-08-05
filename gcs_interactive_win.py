@@ -1,7 +1,5 @@
 # =============================================================================
-# gcs_interactive_win.py  (SIMPLE COMMENTS - ONLY ON MAIN LOGIC)
-# Original code logic is UNCHANGED.
-# This is the Ground Control Station - your remote control for the drone.
+# gcs_interactive_win.py 
 # =============================================================================
 
 import os
