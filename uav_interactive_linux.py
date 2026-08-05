@@ -1,7 +1,5 @@
 # =============================================================================
-# uav_interactive_linux.py  (SIMPLE COMMENTS - ONLY ON MAIN LOGIC)
-# Original code logic is UNCHANGED.
-# This is the UAV side - the drone's brain. Listens for commands and obeys.
+# uav_interactive_linux.py 
 # =============================================================================
 
 import os
