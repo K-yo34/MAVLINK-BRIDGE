@@ -1,6 +1,5 @@
 # =============================================================================
-# crypto_bridge.py  (SIMPLE COMMENTS - ONLY ON MAIN LOGIC)
-# Original code logic is UNCHANGED.
+# crypto_bridge.py 
 # =============================================================================
 
 import os
